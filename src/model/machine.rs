@@ -20,21 +20,3 @@ impl Machine {
         }
     }
 }
-
-#[derive(Debug)]
-pub struct State {
-    pub name: &'static str,
-}
-
-#[derive(Debug)]
-pub struct Transition {
-    name: &'static str,
-    state_in: State,
-    state_out: State,
-}
-
-impl PartialEq for State {
-    fn eq(&self, other: &State) -> bool {
-        self.name == other.name
-    }
-}
