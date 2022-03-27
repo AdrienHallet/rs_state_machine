@@ -11,3 +11,6 @@ fn main() {
     );
     println!("machine: {:?}", machine);
 }
+
+#[cfg(test)]
+mod tests;

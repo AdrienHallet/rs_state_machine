@@ -28,7 +28,7 @@ impl fmt::Display for TransitionError {
             TransitionErrorType::AlreadyExists => {
                 write!(f, "Transition {:?} is already defined in this State Machine (no duplicates).", self.transition)
             }
-            _ => write!(f, "Generic TransitionError with {:?}", self.transition)
+            // _ => write!(f, "Generic TransitionError with {:?}", self.transition)
         }
     }
 }
