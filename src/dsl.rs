@@ -25,7 +25,7 @@ macro_rules! define {
 
     ($machine: ident => $(,)? $input: literal -$transition: literal -> $output: literal) => {
         {
-            // $machine.add_transition($transition);
+            $machine.add_transition($crate::model::transition::Transition::new($input, $transition, $output));
             $machine
         }
     };
