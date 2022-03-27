@@ -1,5 +1,3 @@
-use std::fmt;
-
 use crate::model::transition::Transition;
 use crate::model::errors::*;
 
