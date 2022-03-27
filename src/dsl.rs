@@ -2,7 +2,7 @@
 macro_rules! define {
     ($input: literal -$transition: literal -> $output: literal $(,)?) => {
         {
-            let mut _var = $crate::machine::Machine::new();
+            let mut _var = $crate::model::machine::Machine::new();
             define!(_var => $input - $transition -> $output)
         }
     };
