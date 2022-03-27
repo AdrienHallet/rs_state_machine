@@ -1,23 +1,21 @@
-use crate::model::state::State;
-
 #[derive(Debug)]
-pub struct Transition {
-    pub event: &'static str,
-    pub state_in: State,
-    pub state_out: State,
+pub struct Transition<'trans> {
+    pub event: &'trans str,
+    pub state_in: &'trans str,
+    pub state_out: &'trans str,
 }
 
-impl Transition {
-    pub fn new(input: &'static str, event: &'static str, output: &'static str) -> Transition {
+impl<'trans> Transition<'trans> {
+    pub fn new(input: &'trans str, event: &'trans str, output: &'trans str) -> Transition<'trans> {
         Self {
             event,
-            state_in: State { name: input },
-            state_out:  State { name: output },
+            state_in: input,
+            state_out:  output,
         }
     }
 }
 
-impl PartialEq for Transition {
+impl PartialEq for Transition<'_> {
     fn eq(&self, other: &Transition) -> bool {
         self.event == other.event
             && self.state_in == other.state_in

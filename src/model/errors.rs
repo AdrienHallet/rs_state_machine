@@ -3,9 +3,9 @@ use core::fmt;
 use super::transition::Transition;
 
 #[derive(Debug)]
-pub struct TransitionError {
+pub struct TransitionError<'err> {
     error_type: TransitionErrorType,
-    pub transition: Transition,
+    pub transition: Transition<'err>,
 }
 
 #[derive(Debug)]
@@ -14,14 +14,14 @@ pub enum TransitionErrorType {
     CannotApply,
 }
 
-impl TransitionError {
-    pub fn new(error_type: TransitionErrorType, transition: Transition) -> TransitionError {
+impl<'err> TransitionError<'err> {
+    pub fn new(error_type: TransitionErrorType, transition: Transition<'err>) -> TransitionError<'err> {
         Self {
             error_type,
             transition,
         }
     }
-    pub fn cannot_apply(input: &'static str, event: &'static str) -> TransitionError {
+    pub fn cannot_apply(input: &'err str, event: &'err str) -> TransitionError<'err> {
         Self {
             error_type: TransitionErrorType::CannotApply,
             transition: Transition::new(input, event, ""),
@@ -30,7 +30,7 @@ impl TransitionError {
 
 }
 
-impl fmt::Display for TransitionError {
+impl fmt::Display for TransitionError<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.error_type {
             TransitionErrorType::AlreadyExists => {
