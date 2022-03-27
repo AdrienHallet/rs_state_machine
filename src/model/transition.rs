@@ -2,9 +2,9 @@ use crate::model::state::State;
 
 #[derive(Debug)]
 pub struct Transition {
-    event: &'static str,
-    state_in: State,
-    state_out: State,
+    pub event: &'static str,
+    pub state_in: State,
+    pub state_out: State,
 }
 
 impl Transition {

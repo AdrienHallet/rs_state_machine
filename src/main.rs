@@ -10,6 +10,9 @@ fn main() {
         "CLOSED" -"CLOSE3"-> "CLOSED"
     );
     println!("machine: {:?}", machine);
+
+    let output = machine.get_output("OPENED", "CLOSE");
+    println!("output: {:?}", output)
 }
 
 #[cfg(test)]

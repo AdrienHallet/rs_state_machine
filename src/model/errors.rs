@@ -11,6 +11,7 @@ pub struct TransitionError {
 #[derive(Debug)]
 pub enum TransitionErrorType {
     AlreadyExists,
+    CannotApply,
 }
 
 impl TransitionError {
@@ -20,6 +21,13 @@ impl TransitionError {
             transition,
         }
     }
+    pub fn cannot_apply(input: &'static str, event: &'static str) -> TransitionError {
+        Self {
+            error_type: TransitionErrorType::CannotApply,
+            transition: Transition::new(input, event, ""),
+        }
+    }
+
 }
 
 impl fmt::Display for TransitionError {
@@ -28,7 +36,10 @@ impl fmt::Display for TransitionError {
             TransitionErrorType::AlreadyExists => {
                 write!(f, "Transition {:?} is already defined in this State Machine (no duplicates).", self.transition)
             }
-            // _ => write!(f, "Generic TransitionError with {:?}", self.transition)
+            TransitionErrorType::CannotApply => {
+                write!(f, "Cannot apply [event={:?}] on [input_state={:?}] (unknown transition)", self.transition.event, self.transition.state_in)
+            }
+            //_ => write!(f, "Generic TransitionError with {:?}", self.transition)
         }
     }
 }

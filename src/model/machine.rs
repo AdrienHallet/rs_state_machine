@@ -26,4 +26,13 @@ impl Machine {
             self.transitions.push(transition);
         }
     }
+
+    pub fn get_output(&self, state_in: &'static str, event: &'static str) -> Result<&str, TransitionError> {
+        for transition in &self.transitions {
+            if transition.state_in.name == state_in && transition.event == event {
+                return Ok(transition.state_out.name);
+            }
+        }
+        return Err(TransitionError::cannot_apply(state_in, event));
+    }
 }
