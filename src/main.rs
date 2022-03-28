@@ -11,7 +11,7 @@ fn main() {
     );
     println!("machine: {:?}", machine);
 
-    let output = machine.get_output("OPENED", "CLOSE");
+    let output = machine.get_output("OPENED".to_string(), "CLOSE".to_string());
     println!("output: {:?}", output)
 }
 

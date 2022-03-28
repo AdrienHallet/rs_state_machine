@@ -1,12 +1,12 @@
-#[derive(Debug)]
-pub struct Transition<'trans> {
-    pub event: &'trans str,
-    pub state_in: &'trans str,
-    pub state_out: &'trans str,
+#[derive(Debug, Clone)]
+pub struct Transition {
+    pub event: String,
+    pub state_in: String,
+    pub state_out: String,
 }
 
-impl<'trans> Transition<'trans> {
-    pub fn new(input: &'trans str, event: &'trans str, output: &'trans str) -> Transition<'trans> {
+impl Transition {
+    pub fn new(input: String, event: String, output: String) -> Transition {
         Self {
             event,
             state_in: input,
@@ -15,7 +15,7 @@ impl<'trans> Transition<'trans> {
     }
 }
 
-impl PartialEq for Transition<'_> {
+impl PartialEq for Transition {
     fn eq(&self, other: &Transition) -> bool {
         self.event == other.event
             && self.state_in == other.state_in

@@ -1,5 +1,5 @@
-pub trait Transitionable<'obj> {
-    fn get_state(&'obj self) -> &str;
+pub trait Transitionable {
+    fn get_state(&self) -> String;
     
-    fn set_state(&'obj mut self, new_state: &'obj str);
+    fn set_state(&mut self, new_state: String);
 }

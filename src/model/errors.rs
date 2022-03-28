@@ -2,35 +2,35 @@ use core::fmt;
 
 use super::transition::Transition;
 
-#[derive(Debug)]
-pub struct TransitionError<'err> {
+#[derive(Debug, Clone)]
+pub struct TransitionError {
     error_type: TransitionErrorType,
-    pub transition: Transition<'err>,
+    pub transition: Transition,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TransitionErrorType {
     AlreadyExists,
     CannotApply,
 }
 
-impl<'err> TransitionError<'err> {
-    pub fn new(error_type: TransitionErrorType, transition: Transition<'err>) -> TransitionError<'err> {
+impl TransitionError {
+    pub fn new(error_type: TransitionErrorType, transition: Transition) -> TransitionError {
         Self {
             error_type,
             transition,
         }
     }
-    pub fn cannot_apply(input: &'err str, event: &'err str) -> TransitionError<'err> {
+    pub fn cannot_apply(input: String, event: String) -> TransitionError {
         Self {
             error_type: TransitionErrorType::CannotApply,
-            transition: Transition::new(input, event, ""),
+            transition: Transition::new(input, event, "".to_string()),
         }
     }
 
 }
 
-impl fmt::Display for TransitionError<'_> {
+impl fmt::Display for TransitionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.error_type {
             TransitionErrorType::AlreadyExists => {

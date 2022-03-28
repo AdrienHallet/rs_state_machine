@@ -1,15 +1,15 @@
 use crate::model::transitionable::Transitionable;
 
-pub struct DummyTransitionable<'obj> {
-    pub state: &'obj str,
+pub struct DummyTransitionable {
+    pub state: String,
 }
 
-impl<'obj> Transitionable<'obj> for DummyTransitionable<'obj> {
-    fn get_state(&self) -> &str {
-        self.state
+impl Transitionable for DummyTransitionable {
+    fn get_state(&self) -> String {
+        self.state.to_string()
     }
 
-    fn set_state(&mut self, new_state: &'obj str) {
+    fn set_state(&mut self, new_state: String) {
         self.state = new_state;   
     }
 }

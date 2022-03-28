@@ -18,14 +18,14 @@ macro_rules! define {
 
     ($machine: ident => $(,)? $input: literal -$transition: literal -> $output: literal $(, $input2: literal -$transition2: literal -> $output2: literal)+) => {{
         {
-            $machine.add_transition($crate::model::transition::Transition::new($input, $transition, $output));
+            $machine.add_transition($crate::model::transition::Transition::new($input.to_string(), $transition.to_string(), $output.to_string()));
             define!($machine => $(, $input2 -$transition2 -> $output2)?)
         }
     }};
 
     ($machine: ident => $(,)? $input: literal -$transition: literal -> $output: literal) => {
         {
-            $machine.add_transition($crate::model::transition::Transition::new($input, $transition, $output));
+            $machine.add_transition($crate::model::transition::Transition::new($input.to_string(), $transition.to_string(), $output.to_string()));
             $machine
         }
     };

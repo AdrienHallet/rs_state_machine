@@ -4,23 +4,23 @@ use crate::model::errors::*;
 
 /// Defines the Machine.
 #[derive(Debug)]
-pub struct Machine<'machine> {
+pub struct Machine {
     /// The states of the machine.
-    pub states: Vec<&'machine str>,
+    pub states: Vec<String>,
     /// The transitions of the machine.
-    pub transitions: Vec<Transition<'machine>>,
+    pub transitions: Vec<Transition>,
 }
 
-impl<'machine> Machine<'machine> {
+impl Machine {
     /// Creates an empty machine.
-    pub fn new() -> Machine<'machine> {
+    pub fn new() -> Machine {
         Self {
             states: vec![],
             transitions: vec![],
         }
     }
 
-    pub fn add_transition(&mut self, transition: Transition<'machine>) {
+    pub fn add_transition(&mut self, transition: Transition) {
         if self.transitions.contains(&transition) {
             panic!("{}", TransitionError::new(TransitionErrorType::AlreadyExists, transition))
         } else {
@@ -28,20 +28,23 @@ impl<'machine> Machine<'machine> {
         }
     }
 
-    pub fn get_output<'a>(&self, state_in: &'a str, event: &'a str) -> Result<&'a str, TransitionError<'a>> {
+    pub fn get_output(&self, state_in: String, event: String) -> Result<String, TransitionError> {
         for transition in &self.transitions {
-            if transition.state_in == state_in && transition.event == event {
-                return Ok(stringify!(transition.state_out));
+            if transition.state_in == *state_in && transition.event == *event {
+                return Ok(transition.state_out.clone());
             }
         }
-        return Err(TransitionError::cannot_apply(state_in, stringify!(event)));
+        return Err(TransitionError::cannot_apply(state_in, stringify!(event).to_string()));
     }
 
-    pub fn apply<'a>(&'machine self, object: &'a mut dyn Transitionable<'a>, event: &'a str) -> Result<&'a str, TransitionError<'a>> {
-        let output = self.get_output(stringify!(object.get_state()), event);
-        if output.is_ok() {
-            object.set_state(stringify!(output.unwrap()));
+    pub fn apply(&self, object: &mut dyn Transitionable, event: String) -> Result<String, TransitionError> {
+        let output = self.get_output(object.get_state(), event);
+        match output {
+            Ok(state) => {
+                object.set_state(state.clone());
+                Ok(state.clone())
+            },
+            Err(error) => Err(error),
         }
-        return output;
     }
 }
