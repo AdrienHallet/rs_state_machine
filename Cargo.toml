@@ -1,8 +1,12 @@
 [package]
+
 name = "rs_state_machine"
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = [ "Adrien Hallet" ]
+description = "A business-oriented state machine library"
+license = "MIT"
+repository = "https://github.com/AdrienHallet/rs_state_machine"
+readme = "README.md"
 
 [dependencies]
