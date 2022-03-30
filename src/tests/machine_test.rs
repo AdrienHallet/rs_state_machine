@@ -1,4 +1,4 @@
-use crate::{Machine, model::errors::TransitionError};
+use crate::Machine;
 use super::transitionable_test::DummyTransitionable;
 
 #[test]
