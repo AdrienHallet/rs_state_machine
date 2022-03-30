@@ -2,7 +2,12 @@ mod dsl;
 mod model;
 use model::machine::Machine;
 
+/// This function will disappear once released as library
 fn main() {
+    let light_switch = define!(
+        "OFF" - "TURN_ON"  -> "ON",
+        "ON"  - "TURN_OFF" -> "OFF"
+    );
     let machine: Machine = define!(
         "CLOSED" -"OPEN"-> "OPENED",
         "OPENED" -"CLOSE"-> "CLOSED",
@@ -15,5 +20,6 @@ fn main() {
     println!("output: {:?}", output)
 }
 
+/// Tests
 #[cfg(test)]
 mod tests;
