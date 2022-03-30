@@ -17,6 +17,11 @@ impl Machine {
         }
     }
 
+    /// Registers a new [Transition] in the [Machine].
+    /// 
+    /// # Panics
+    /// 
+    /// Panics if the given [Transition] is already present in the [Machine].
     pub fn add_transition(&mut self, transition: Transition) {
         if self.transitions.contains(&transition) {
             panic!("{}", TransitionError::new(TransitionErrorType::AlreadyExists, transition))
@@ -25,13 +30,20 @@ impl Machine {
         }
     }
 
-    pub fn get_output(&self, state_in: String, event: String) -> Result<String, TransitionError> {
+    /// Returns the [String] `output_state` for the given `input_state` and `event` based on the [Transition]s
+    /// registered in the [Machine].
+    /// 
+    /// # Errors
+    /// 
+    /// Errors if `event` cannot be aplied on `input_state` (no matching transition).
+    /// 
+    pub fn get_output(&self, input_state: String, event: String) -> Result<String, TransitionError> {
         for transition in &self.transitions {
-            if transition.state_in == *state_in && transition.event == *event {
+            if transition.state_in == *input_state && transition.event == *event {
                 return Ok(transition.state_out.clone());
             }
         }
-        return Err(TransitionError::cannot_apply(state_in, stringify!(event).to_string()));
+        return Err(TransitionError::cannot_apply(input_state, stringify!(event).to_string()));
     }
 
     pub fn apply(&self, object: &mut dyn Transitionable, event: String) -> Result<String, TransitionError> {
