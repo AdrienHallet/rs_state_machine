@@ -5,8 +5,6 @@ use crate::model::errors::*;
 /// Defines the Machine.
 #[derive(Debug)]
 pub struct Machine {
-    /// The states of the machine.
-    pub states: Vec<String>,
     /// The transitions of the machine.
     pub transitions: Vec<Transition>,
 }
@@ -15,7 +13,6 @@ impl Machine {
     /// Creates an empty machine.
     pub fn new() -> Machine {
         Self {
-            states: vec![],
             transitions: vec![],
         }
     }
