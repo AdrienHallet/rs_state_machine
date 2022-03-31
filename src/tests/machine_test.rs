@@ -1,4 +1,4 @@
-use crate::Machine;
+use crate::model::machine::Machine;
 use super::transitionable_test::DummyTransitionable;
 
 #[test]

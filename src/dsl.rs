@@ -13,10 +13,12 @@
 /// 
 /// # Example:
 /// ```rust
+/// # #[macro_use] extern crate rs_state_machine; fn main() {
 /// let light_switch = define!(
 ///     "OFF" - "TURN_ON"  -> "ON",
 ///     "ON"  - "TURN_OFF" -> "OFF"
 /// );
+/// # }
 /// ```
 /// 
 #[macro_export]

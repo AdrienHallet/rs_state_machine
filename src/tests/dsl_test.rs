@@ -1,5 +1,4 @@
-use crate::define;
-use crate::Machine;
+use crate::{define, model::machine::Machine};
 
 #[test]
 fn should_parse_one_line() {
