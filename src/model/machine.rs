@@ -46,6 +46,15 @@ impl Machine {
         return Err(TransitionError::cannot_apply(input_state, stringify!(event).to_string()));
     }
 
+    /// Returns the [String] `output_state` for the given:
+    /// * `object` - a [Transitionable] with a current state
+    /// * `event` - an event to apply
+    /// 
+    /// The new (output) state will be set in `object`.
+    /// 
+    /// # Errors
+    /// 
+    /// Errors if `event` cannot be applied on the current state of `object`
     pub fn apply(&self, object: &mut dyn Transitionable, event: String) -> Result<String, TransitionError> {
         let output = self.get_output(object.get_state(), event);
         match output {
