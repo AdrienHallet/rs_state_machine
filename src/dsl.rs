@@ -20,7 +20,6 @@
 /// );
 /// # }
 /// ```
-/// 
 #[macro_export]
 macro_rules! define {
     // One-transition defined machines

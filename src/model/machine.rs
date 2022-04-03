@@ -10,6 +10,7 @@ pub struct Machine {
 }
 
 impl Machine {
+
     /// Creates an empty machine.
     pub fn new() -> Machine {
         Self {

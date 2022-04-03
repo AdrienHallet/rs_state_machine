@@ -15,7 +15,9 @@ pub struct TransitionError {
 /// Types are currently only used to specify the display information of an error.
 #[derive(Debug, Clone)]
 pub enum TransitionErrorType {
+    /// The transition already exists in the [Machine](super::machine::Machine).
     AlreadyExists,
+    /// The transition cannot be applied. Can be explained by a missing transition definition, wrong event, wrong input state.
     CannotApply,
 }
 
@@ -30,6 +32,7 @@ impl TransitionError {
             transition,
         }
     }
+
     /// Creates a new [`TransitionError`] of type [`TransitionErrorType::CannotApply`] from the given:
     /// * `input` - input state of the error'd transaction
     /// * `event` - event of the error'd transaction
