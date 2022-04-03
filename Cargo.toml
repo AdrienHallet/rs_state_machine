@@ -1,12 +1,14 @@
 [package]
 
 name = "rs_state_machine"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2021"
 authors = [ "Adrien Hallet" ]
 description = "A business-oriented state machine library"
 license = "MIT"
 repository = "https://github.com/AdrienHallet/rs_state_machine"
+documentation = "https://docs.rs/rs_state_machine"
 readme = "README.md"
+keywords = ["state-machine"]
 
 [dependencies]
