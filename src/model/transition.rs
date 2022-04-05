@@ -21,6 +21,14 @@ impl Transition {
             state_out:  output,
         }
     }
+
+    /// Todo
+    pub fn partial_compare(&self, input: Option<String>, event: Option<String>, output: Option<String>) -> bool {
+        (event.is_none() || self.event == event.unwrap())
+        && (input.is_none() || self.state_in == input.unwrap())
+        && (output.is_none() || self.state_out == output.unwrap())
+    }
+
 }
 
 impl PartialEq for Transition {
