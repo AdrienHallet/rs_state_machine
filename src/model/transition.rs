@@ -22,11 +22,20 @@ impl Transition {
         }
     }
 
-    /// Todo
-    pub fn partial_compare(&self, input: Option<String>, event: Option<String>, output: Option<String>) -> bool {
-        (event.is_none() || self.event == event.unwrap())
-        && (input.is_none() || self.state_in == input.unwrap())
-        && (output.is_none() || self.state_out == output.unwrap())
+    /// Partially compares the current [`Transition`] to another.
+    /// A partial comparison ignores [`None`] values 
+    /// 
+    /// # Example
+    /// ```rust
+    /// use rs_state_machine::model::transition::Transition;
+    /// 
+    /// let transition = Transition { event: "EVENT".to_string(), state_in: "INPUT".to_string(), state_out: "OUTPUT".to_string() };
+    /// assert!(transition.partial_compare(None, Some(&"EVENT".to_string()), None))
+    /// ```
+    pub fn partial_compare(&self, input: Option<&String>, event: Option<&String>, output: Option<&String>) -> bool {
+        (event.is_none() || &self.event == event.unwrap())
+        && (input.is_none() || &self.state_in == input.unwrap())
+        && (output.is_none() || &self.state_out == output.unwrap())
     }
 
 }
