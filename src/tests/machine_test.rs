@@ -38,3 +38,21 @@ fn should_apply() {
     assert_eq!("ON", output.unwrap());
     assert_eq!("ON", light.get_state());
 }
+
+#[test]
+#[should_panic]
+fn should_not_allow_twice_same_transition() {
+    let _machine_with_duplicate = define!(
+        "OFF" - "TURN_ON" -> "ON",
+        "OFF" - "TURN_ON" -> "ON"
+    );
+}
+
+#[test]
+#[should_panic]
+fn should_not_allow_nondeterministic_transitions() {
+    let _machine_with_nondeterminism = define!(
+        "OFF" - "TURN_ON" -> "ON",
+        "OFF" - "TURN_ON" -> "OFF"
+    );
+}

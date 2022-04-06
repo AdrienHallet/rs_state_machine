@@ -19,6 +19,8 @@ pub enum TransitionErrorType {
     AlreadyExists,
     /// The transition cannot be applied. Can be explained by a missing transition definition, wrong event, wrong input state.
     CannotApply,
+    /// Another transition with the same input & event exists, thus preventing to ensure which output state will be selected.
+    NondeterministicTransition
 }
 
 impl TransitionError {
@@ -50,6 +52,9 @@ impl fmt::Display for TransitionError {
         match &self.error_type {
             TransitionErrorType::AlreadyExists => {
                 write!(f, "Transition {:?} is already defined in this State Machine (no duplicates).", self.transition)
+            }
+            TransitionErrorType::NondeterministicTransition => {
+                write!(f, "Two different transitions exist with [input={:?}, event={:?}], leading to non-deterministic state machine", self.transition.state_in, self.transition.event)
             }
             TransitionErrorType::CannotApply => {
                 write!(f, "Cannot apply [event={:?}] on [input_state={:?}] (unknown transition)", self.transition.event, self.transition.state_in)

@@ -3,7 +3,7 @@ use crate::model::transitionable::Transitionable;
 use crate::model::errors::*;
 
 /// Defines the Machine.
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Machine {
     /// The transitions of the machine.
     pub transitions: Vec<Transition>,
@@ -22,10 +22,14 @@ impl Machine {
     /// 
     /// # Panics
     /// 
-    /// Panics if the given [Transition] is already present in the [Machine].
+    /// Panics if the given [Transition]:
+    /// * is already present in the [Machine]
+    /// * has the same input and event as another, preventing to decide which output is selected
     pub fn add_transition(&mut self, transition: Transition) {
         if self.transitions.contains(&transition) {
             panic!("{}", TransitionError::new(TransitionErrorType::AlreadyExists, transition))
+        } else if self.transitions.iter().any(|trans| trans.partial_compare(Some(&transition.state_in), Some(&transition.event), None)) {
+            panic!("{}", TransitionError::new(TransitionErrorType::NondeterministicTransition, transition))
         } else {
             self.transitions.push(transition);
         }
@@ -44,7 +48,7 @@ impl Machine {
                 return Ok(transition.state_out.clone());
             }
         }
-        return Err(TransitionError::cannot_apply(input_state, stringify!(event).to_string()));
+        Err(TransitionError::cannot_apply(input_state, stringify!(event).to_string()))
     }
 
     /// Returns the [String] `output_state` for the given:
@@ -61,7 +65,7 @@ impl Machine {
         match output {
             Ok(state) => {
                 object.set_state(state.clone());
-                Ok(state.clone())
+                Ok(state)
             },
             Err(error) => Err(error),
         }
