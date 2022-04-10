@@ -6,3 +6,5 @@ pub mod transition;
 pub mod errors;
 /// Representation and actions of structures that can be transitioned by the State Machine.
 pub mod transitionable;
+pub mod graph;
+pub mod matrix;

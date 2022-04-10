@@ -1,4 +1,4 @@
-use crate::model::transition::Transition;
+use crate::core::transition::Transition;
 
 #[test]
 pub fn should_compare_partially() {
