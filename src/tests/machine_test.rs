@@ -1,4 +1,4 @@
-use crate::{model::{machine::Machine, transitionable::Transitionable}, define};
+use crate::{core::{machine::Machine, transitionable::Transitionable}, define};
 use super::transitionable_test::DummyTransitionable;
 
 #[test]

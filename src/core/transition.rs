@@ -27,7 +27,7 @@ impl Transition {
     /// 
     /// # Example
     /// ```rust
-    /// use rs_state_machine::model::transition::Transition;
+    /// use rs_state_machine::core::transition::Transition;
     /// 
     /// let transition = Transition { event: "EVENT".to_string(), state_in: "INPUT".to_string(), state_out: "OUTPUT".to_string() };
     /// assert!(transition.partial_compare(None, Some(&"EVENT".to_string()), None))

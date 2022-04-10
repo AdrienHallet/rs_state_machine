@@ -1,6 +1,6 @@
-use crate::model::transition::Transition;
-use crate::model::transitionable::Transitionable;
-use crate::model::errors::*;
+use crate::core::transition::Transition;
+use crate::core::transitionable::Transitionable;
+use crate::core::errors::*;
 
 /// Defines the Machine.
 #[derive(Debug, Default)]

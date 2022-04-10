@@ -1,4 +1,4 @@
-use crate::model::transitionable::Transitionable;
+use crate::core::transitionable::Transitionable;
 
 pub struct DummyTransitionable {
     pub state: String,
