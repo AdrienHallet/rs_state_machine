@@ -7,6 +7,8 @@ pub struct Transition {
     pub state_in: String,
     /// The output (outgoing) state after the event is applied.
     pub state_out: String,
+    /// An optional guard function that allows the transition to happen (if return value is true)
+    pub guard: Option<fn() -> bool>,
 }
 
 impl Transition {
@@ -19,6 +21,33 @@ impl Transition {
             event,
             state_in: input,
             state_out:  output,
+            guard: None,
+        }
+    }
+
+    /// Adds a guard to the [`Transition`], which is itself returned.
+    /// 
+    /// * `guard` - An [`Option`] containing a function returning `true` if the transition should be allowed
+    /// 
+    /// # Example
+    /// ```rust
+    /// use rs_state_machine::core::transition::Transition;
+    /// 
+    /// let transition = Transition::new("INPUT".to_string(), "EVENT".to_string(), "OUTPUT".to_string())
+    ///                             .with_guard(Some(|| true));
+    /// assert!(transition.is_allowed())                     
+    /// ```
+    pub fn with_guard(mut self, guard: Option<fn() -> bool>) -> Transition {
+        self.guard = guard;
+        self
+    }
+
+    /// Returns the evaluation of ´guard´ function, 
+    /// or `true` if there is no guard to the transaction.
+    pub fn is_allowed(&self) -> bool {
+        match self.guard {
+            None => true,
+            Some(function) => function(),
         }
     }
 
@@ -29,7 +58,7 @@ impl Transition {
     /// ```rust
     /// use rs_state_machine::core::transition::Transition;
     /// 
-    /// let transition = Transition { event: "EVENT".to_string(), state_in: "INPUT".to_string(), state_out: "OUTPUT".to_string() };
+    /// let transition = Transition::new("INPUT".to_string(), "EVENT".to_string(), "OUTPUT".to_string());
     /// assert!(transition.partial_compare(None, Some(&"EVENT".to_string()), None))
     /// ```
     pub fn partial_compare(&self, input: Option<&String>, event: Option<&String>, output: Option<&String>) -> bool {
