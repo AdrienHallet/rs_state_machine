@@ -60,7 +60,7 @@ impl Machine {
     /// # Errors
     /// 
     /// Errors if `event` cannot be applied on the current state of `object`
-    pub fn apply(&self, object: &mut dyn Transitionable, event: String) -> Result<String, TransitionError> {
+    pub fn apply(&self, object: &mut impl Transitionable, event: String) -> Result<String, TransitionError> {
         let output = self.get_output(object.get_state(), event);
         match output {
             Ok(state) => {

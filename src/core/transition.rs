@@ -1,5 +1,6 @@
+use std::fmt::Debug;
+
 /// Represents a Transition on the [Machine](super::machine::Machine).
-#[derive(Debug, Clone)]
 pub struct Transition {
     /// The event (i.e.: action) to apply to make the transition effective.
     pub event: String,
@@ -45,7 +46,7 @@ impl Transition {
     /// Returns the evaluation of ´guard´ function, 
     /// or `true` if there is no guard to the transaction.
     pub fn is_allowed(&self) -> bool {
-        match self.guard {
+        match &self.guard {
             None => true,
             Some(function) => function(),
         }
@@ -74,5 +75,16 @@ impl PartialEq for Transition {
         self.event == other.event
             && self.state_in == other.state_in
             && self.state_out == other.state_out
+    }
+}
+
+impl Debug for Transition {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Transition")
+        .field("event", &self.event)
+        .field("state_in", &self.state_in)
+        .field("state_out", &self.state_out)
+        // .field("guard", &self.guard)
+        .finish()
     }
 }

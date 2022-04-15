@@ -2,7 +2,7 @@ use core::fmt;
 use super::transition::Transition;
 
 /// Represents an error with a Transition.
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct TransitionError {
     /// The type of the error.
     error_type: TransitionErrorType,

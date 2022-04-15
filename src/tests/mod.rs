@@ -6,3 +6,5 @@ mod machine_test;
 mod transition_test;
 #[cfg(test)]
 mod transitionable_test;
+#[cfg(test)]
+mod e2e_test;
