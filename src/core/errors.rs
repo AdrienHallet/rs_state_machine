@@ -15,12 +15,19 @@ pub struct TransitionError {
 /// Types are currently only used to specify the display information of an error.
 #[derive(Debug, Clone)]
 pub enum TransitionErrorType {
+    // Definition Errors
+
     /// The transition already exists in the [Machine](super::machine::Machine).
     AlreadyExists,
+    /// Another transition with the same input & event exists, thus preventing to ensure which output state will be selected.
+    NondeterministicTransition,
+
+    // Running Errors
+
     /// The transition cannot be applied. Can be explained by a missing transition definition, wrong event, wrong input state.
     CannotApply,
-    /// Another transition with the same input & event exists, thus preventing to ensure which output state will be selected.
-    NondeterministicTransition
+    /// The transition's guard does not allow the transition to be applied.
+    NotAllowed,
 }
 
 impl TransitionError {
@@ -58,6 +65,9 @@ impl fmt::Display for TransitionError {
             }
             TransitionErrorType::CannotApply => {
                 write!(f, "Cannot apply [event={:?}] on [input_state={:?}] (unknown transition)", self.transition.event, self.transition.state_in)
+            }
+            TransitionErrorType::NotAllowed => {
+                write!(f, "Cannot apply [transition={:?}], the guard function does not allow it", self.transition)
             }
             //_ => write!(f, "Generic TransitionError with {:?}", self.transition)
         }

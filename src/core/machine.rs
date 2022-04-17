@@ -45,7 +45,12 @@ impl Machine {
     pub fn get_output(&self, input_state: String, event: String) -> Result<String, TransitionError> {
         for transition in &self.transitions {
             if transition.state_in == *input_state && transition.event == *event {
-                return Ok(transition.state_out.clone());
+                if transition.is_allowed() {
+                    return Ok(transition.state_out.clone());
+                } else {
+                    return Err(TransitionError::new(TransitionErrorType::NotAllowed, Transition::new(transition.state_in.to_string(), transition.event.to_string(), transition.state_out.to_string())))
+                }
+                
             }
         }
         Err(TransitionError::cannot_apply(input_state, stringify!(event).to_string()))

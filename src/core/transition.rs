@@ -1,6 +1,7 @@
 use std::fmt::Debug;
 
 /// Represents a Transition on the [Machine](super::machine::Machine).
+#[derive(Clone)]
 pub struct Transition {
     /// The event (i.e.: action) to apply to make the transition effective.
     pub event: String,
