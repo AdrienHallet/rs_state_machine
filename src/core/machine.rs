@@ -1,4 +1,4 @@
-use crate::core::transition::Transition;
+use crate::core::transition::StringTransition;
 use crate::core::transitionable::Transitionable;
 use crate::core::errors::*;
 
@@ -6,7 +6,7 @@ use crate::core::errors::*;
 #[derive(Debug, Default)]
 pub struct Machine {
     /// The transitions of the machine.
-    pub transitions: Vec<Transition>,
+    pub transitions: Vec<StringTransition>,
 }
 
 impl Machine {
@@ -25,7 +25,7 @@ impl Machine {
     /// Panics if the given [Transition]:
     /// * is already present in the [Machine]
     /// * has the same input and event as another, preventing to decide which output is selected
-    pub fn add_transition(&mut self, transition: Transition) {
+    pub fn add_transition(&mut self, transition: StringTransition) {
         if self.transitions.contains(&transition) {
             panic!("{}", TransitionError::new(TransitionErrorType::AlreadyExists, transition))
         } else if self.transitions.iter().any(|trans| trans.partial_compare(Some(&transition.state_in), Some(&transition.event), None)) {
@@ -48,7 +48,7 @@ impl Machine {
                 if transition.is_allowed() {
                     return Ok(transition.state_out.clone());
                 } else {
-                    return Err(TransitionError::new(TransitionErrorType::NotAllowed, Transition::new(transition.state_in.to_string(), transition.event.to_string(), transition.state_out.to_string())))
+                    return Err(TransitionError::new(TransitionErrorType::NotAllowed, StringTransition::new(transition.state_in.to_string(), transition.event.to_string(), transition.state_out.to_string())))
                 }
                 
             }

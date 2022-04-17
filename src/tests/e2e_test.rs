@@ -1,4 +1,4 @@
-use crate::core::{machine::Machine, transition::Transition, transitionable::Transitionable};
+use crate::core::{machine::Machine, transition::StringTransition, transitionable::Transitionable};
 
 struct Light {
     state: String,
@@ -20,7 +20,7 @@ impl Transitionable for Light {
 fn integration_scenario_one() {
     let mut room_light = Light { state: "OFF".to_string(), toggled: false };
     let mut light_switch = Machine::new();
-    let turning_on = Transition::new("OFF".to_string(), "TURN_ON".to_string(), "ON".to_string())
+    let turning_on = StringTransition::new("OFF".to_string(), "TURN_ON".to_string(), "ON".to_string())
                                             .with_guard(Some(guardian));
 
     light_switch.add_transition(turning_on);

@@ -2,7 +2,7 @@ use std::fmt::Debug;
 
 /// Represents a Transition on the [Machine](super::machine::Machine).
 #[derive(Clone)]
-pub struct Transition {
+pub struct StringTransition {
     /// The event (i.e.: action) to apply to make the transition effective.
     pub event: String,
     /// The input (ingoing) state before the event is applied.
@@ -13,12 +13,12 @@ pub struct Transition {
     pub guard: Option<fn() -> bool>,
 }
 
-impl Transition {
+impl StringTransition {
     /// Creates a new [`Transition`] from the given:
     /// * `input` - the state before the event
     /// * `event` - the event
     /// * `output`- the state after the event
-    pub fn new(input: String, event: String, output: String) -> Transition {
+    pub fn new(input: String, event: String, output: String) -> StringTransition {
         Self {
             event,
             state_in: input,
@@ -33,13 +33,13 @@ impl Transition {
     /// 
     /// # Example
     /// ```rust
-    /// use rs_state_machine::core::transition::Transition;
+    /// use rs_state_machine::core::transition::StringTransition;
     /// 
-    /// let transition = Transition::new("INPUT".to_string(), "EVENT".to_string(), "OUTPUT".to_string())
+    /// let transition = StringTransition::new("INPUT".to_string(), "EVENT".to_string(), "OUTPUT".to_string())
     ///                             .with_guard(Some(|| true));
     /// assert!(transition.is_allowed())                     
     /// ```
-    pub fn with_guard(mut self, guard: Option<fn() -> bool>) -> Transition {
+    pub fn with_guard(mut self, guard: Option<fn() -> bool>) -> StringTransition {
         self.guard = guard;
         self
     }
@@ -58,9 +58,9 @@ impl Transition {
     /// 
     /// # Example
     /// ```rust
-    /// use rs_state_machine::core::transition::Transition;
+    /// use rs_state_machine::core::transition::StringTransition;
     /// 
-    /// let transition = Transition::new("INPUT".to_string(), "EVENT".to_string(), "OUTPUT".to_string());
+    /// let transition = StringTransition::new("INPUT".to_string(), "EVENT".to_string(), "OUTPUT".to_string());
     /// assert!(transition.partial_compare(None, Some(&"EVENT".to_string()), None))
     /// ```
     pub fn partial_compare(&self, input: Option<&String>, event: Option<&String>, output: Option<&String>) -> bool {
@@ -71,15 +71,15 @@ impl Transition {
 
 }
 
-impl PartialEq for Transition {
-    fn eq(&self, other: &Transition) -> bool {
+impl PartialEq for StringTransition {
+    fn eq(&self, other: &StringTransition) -> bool {
         self.event == other.event
             && self.state_in == other.state_in
             && self.state_out == other.state_out
     }
 }
 
-impl Debug for Transition {
+impl Debug for StringTransition {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("Transition")
         .field("event", &self.event)

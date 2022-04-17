@@ -1,5 +1,5 @@
 use core::fmt;
-use super::transition::Transition;
+use super::transition::StringTransition;
 
 /// Represents an error with a Transition.
 #[derive(Debug)]
@@ -7,7 +7,7 @@ pub struct TransitionError {
     /// The type of the error.
     error_type: TransitionErrorType,
     /// The transition that caused the error.
-    pub transition: Transition,
+    pub transition: StringTransition,
 }
 
 /// Classifies the types of [TransitionError]s that can happen in a [Machine](super::machine::Machine).
@@ -35,7 +35,7 @@ impl TransitionError {
     /// Creates a new [`TransitionError`] from the given:  
     /// * `error_type` - type of the error  
     /// * `transition` - the transition from which the error originates
-    pub fn new(error_type: TransitionErrorType, transition: Transition) -> TransitionError {
+    pub fn new(error_type: TransitionErrorType, transition: StringTransition) -> TransitionError {
         Self {
             error_type,
             transition,
@@ -48,7 +48,7 @@ impl TransitionError {
     pub fn cannot_apply(input: String, event: String) -> TransitionError {
         Self {
             error_type: TransitionErrorType::CannotApply,
-            transition: Transition::new(input, event, "".to_string()),
+            transition: StringTransition::new(input, event, "".to_string()),
         }
     }
 

@@ -43,7 +43,7 @@ macro_rules! define {
     // Parsing one transition with remaining transitions
     ($machine: ident => $(,)? $input: literal -$transition: literal -> $output: literal $(, $input2: literal -$transition2: literal -> $output2: literal)+) => {{
         {
-            $machine.add_transition($crate::core::transition::Transition::new($input.to_string(), $transition.to_string(), $output.to_string()));
+            $machine.add_transition($crate::core::transition::StringTransition::new($input.to_string(), $transition.to_string(), $output.to_string()));
             define!($machine => $(, $input2 -$transition2 -> $output2)?)
         }
     }};
@@ -51,7 +51,7 @@ macro_rules! define {
     // Parsing one transition with no remaining transition
     ($machine: ident => $(,)? $input: literal -$transition: literal -> $output: literal) => {
         {
-            $machine.add_transition($crate::core::transition::Transition::new($input.to_string(), $transition.to_string(), $output.to_string()));
+            $machine.add_transition($crate::core::transition::StringTransition::new($input.to_string(), $transition.to_string(), $output.to_string()));
             $machine
         }
     };

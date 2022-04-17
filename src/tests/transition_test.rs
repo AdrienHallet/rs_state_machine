@@ -1,8 +1,8 @@
-use crate::core::transition::Transition;
+use crate::core::transition::StringTransition;
 
 #[test]
 pub fn should_compare_partially() {
-    let transition = Transition::new("INPUT".to_string(), "EVENT".to_string(), "OUTPUT".to_string());
+    let transition = StringTransition::new("INPUT".to_string(), "EVENT".to_string(), "OUTPUT".to_string());
     
     assert!(transition.partial_compare(None, None, None));
     assert!(transition.partial_compare(None, None, Some(&"OUTPUT".to_string())));
@@ -20,13 +20,13 @@ pub fn should_compare_partially() {
 
 #[test]
 pub fn should_allow_without_guard() {
-    let transition = Transition::new("INPUT".to_string(), "EVENT".to_string(), "OUTPUT".to_string());
+    let transition = StringTransition::new("INPUT".to_string(), "EVENT".to_string(), "OUTPUT".to_string());
     assert!(transition.is_allowed());
 }
 
 #[test]
 pub fn should_guard() {
-    let mut transition = Transition::new("INPUT".to_string(), "EVENT".to_string(), "OUTPUT".to_string());
+    let mut transition = StringTransition::new("INPUT".to_string(), "EVENT".to_string(), "OUTPUT".to_string());
     transition.guard = Some(|| true);
     assert!(transition.is_allowed());
 
