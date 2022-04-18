@@ -1,12 +1,12 @@
-use crate::{core::{machine::Machine, transitionable::Transitionable}, define};
+use crate::{core::{machine::Machine, transitionable::Transitionable, transition::Transition}, define};
 use super::transitionable_test::DummyTransitionable;
 
 #[test]
 fn should_not_apply_unexisting_event() {
-    let empty_machine = Machine::new();
-    let mut transitionable = DummyTransitionable{ state: "INPUT".to_string() };
+    let empty_machine: Machine<&str, &str> = Machine::new();
+    let mut transitionable = DummyTransitionable{ state: "INPUT" };
     
-    let result = empty_machine.apply(&mut transitionable, "NON_EXISTING_TRANSITION".to_string());
+    let result = empty_machine.apply(&mut transitionable, "NON_EXISTING_TRANSITION");
     assert!(result.is_err());
 }
 
@@ -17,7 +17,7 @@ fn should_get_output() {
         "ON"  - "TURN_OFF" -> "OFF"
     );
 
-    let output = light_switch.get_output("OFF".to_string(), "TURN_ON".to_string());
+    let output = light_switch.get_output(&"OFF".to_string(), &"TURN_ON".to_string());
 
     assert!(output.is_ok());
     assert_eq!("ON", output.unwrap());
@@ -25,17 +25,16 @@ fn should_get_output() {
 
 #[test]
 fn should_apply() {
-    let light_switch = define!(
-        "OFF" - "TURN_ON"  -> "ON",
-        "ON"  - "TURN_OFF" -> "OFF"
-    );
+    let mut light_switch: Machine<&str, &str> = Machine::new();
+    light_switch.add_transition(Transition::new("OFF", "TURN_ON", "ON"));
+    light_switch.add_transition(Transition::new("ON", "TURN_OFF", "OFF"));
 
-    let mut light: DummyTransitionable = DummyTransitionable { state: "OFF".to_string() };
+    let mut light: DummyTransitionable = DummyTransitionable { state: "OFF" };
 
-    let output = light_switch.apply(&mut light, "TURN_ON".to_string());
-
+    let output = light_switch.apply(&mut light, "TURN_ON");
+    
     assert!(output.is_ok());
-    assert_eq!("ON", output.unwrap());
+    assert_eq!("ON", *output.unwrap()); // Todo double ref again
     assert_eq!("ON", light.get_state());
 }
 
