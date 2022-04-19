@@ -1,14 +1,15 @@
 # Rust State Machine
 ![Build](https://github.com/AdrienHallet/rs_state_machine/actions/workflows/rust.yml/badge.svg)
-> A (Finite) State Machine library in the works
+> A (Finite) State Machine library
 
 This Rust Library aims to provide a developer-friendly, Business-Oriented, (Finite) State Machine.
 
 ## Features
 * Define State Machines, even easier with the library's DSL
 * Apply events on states to know the output
+* Guard functions on transitions
 
-_More features (hopefully) coming Soon™_
+_More features coming Soon™_
 
 ## Example
 
