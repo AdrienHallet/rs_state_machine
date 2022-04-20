@@ -27,7 +27,7 @@ fn integration_scenario_one() {
     let applied = light_switch.apply(&mut room_light, "TURN_ON");
 
     assert!(applied.is_ok());
-    assert_eq!("ON", *applied.unwrap()); // Todo twice-referenced, might be simplified?
+    assert_eq!("ON", *applied.unwrap());
     
 }
 

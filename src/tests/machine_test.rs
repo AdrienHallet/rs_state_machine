@@ -17,10 +17,10 @@ fn should_get_output() {
         "ON"  - "TURN_OFF" -> "OFF"
     );
 
-    let output = light_switch.get_output(&"OFF".to_string(), &"TURN_ON".to_string());
+    let output = light_switch.get_output(&"OFF", &"TURN_ON");
 
     assert!(output.is_ok());
-    assert_eq!("ON", output.unwrap());
+    assert_eq!(&"ON", output.unwrap());
 }
 
 #[test]
@@ -34,7 +34,7 @@ fn should_apply() {
     let output = light_switch.apply(&mut light, "TURN_ON");
     
     assert!(output.is_ok());
-    assert_eq!("ON", *output.unwrap()); // Todo double ref again
+    assert_eq!("ON", *output.unwrap());
     assert_eq!("ON", light.get_state());
 }
 

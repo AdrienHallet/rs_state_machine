@@ -79,8 +79,8 @@ where
 
 impl<S, E> PartialEq for Transition<S, E> 
 where
-    S: PartialEq,
-    E: PartialEq,
+    S: PartialEq + Debug,
+    E: PartialEq + Debug,
 {
     fn eq(&self, other: &Transition<S, E>) -> bool {
         self.event == other.event

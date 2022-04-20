@@ -1,4 +1,5 @@
-use core::fmt;
+use std::fmt;
+use std::fmt::Debug;
 use super::transition::Transition;
 
 /// Represents an error with a Transition.
@@ -39,14 +40,25 @@ where
     S: PartialEq + Copy,
     E: PartialEq + Copy,
 {
-    
-    /// Creates a new [`TransitionError`] from the given:  
-    /// * `error_type` - type of the error  
-    /// * `transition` - the transition from which the error originates
-    pub fn new(error_type: TransitionErrorType, transition: Transition<S, E>) -> TransitionError<S, E> {
+    /// Creates a new [`TransitionError`] of type [`TransitionErrorType::AlreadyExists`] from the given:  
+    /// * `input` - the input state of the duplicated transition
+    /// * `event` - the event of the duplicated transition
+    /// * `output` - the output state of the duplicated transition
+    pub fn already_exists(input: S, event: E, output: S) -> TransitionError<S, E> {
         Self {
-            error_type,
-            transition,
+            error_type: TransitionErrorType::AlreadyExists,
+            transition: Transition::new(input, event, output),
+        }
+    }
+
+    /// Creates a new [`TransitionError`] of type [`TransitionErrorType::NondeterministicTransition`] from the given:  
+    /// * `input` - the input state of the nondeterministic transition
+    /// * `event` - the event of the nondeterministic transition
+    /// * `output` - the output state of the nondeterministic transition
+    pub fn nondeterministic(input: S, event: E, output: S) -> TransitionError<S, E> {
+        Self {
+            error_type: TransitionErrorType::NondeterministicTransition,
+            transition: Transition::new(input, event, output),
         }
     }
 
@@ -60,26 +72,37 @@ where
         }
     }
 
+    /// Creates a new [`TransitionError`] of type [`TransitionErrorType::NotAllowed`] from the given:  
+    /// * `input` - the input state of the not allowed transition
+    /// * `event` - the event of the not allowed transition
+    /// * `output` - the output state of the not allowed transition
+    pub fn not_allowed(input: S, event: E, output: S) -> TransitionError<S, E> {
+        Self {
+            error_type: TransitionErrorType::NotAllowed,
+            transition: Transition::new(input, event, output),
+        }
+    }
+
 }
 
 impl<S, E> fmt::Display for TransitionError<S, E>
 where
-    S: PartialEq,
-    E: PartialEq,
+    S: PartialEq + Debug,
+    E: PartialEq + Debug,
 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.error_type {
             TransitionErrorType::AlreadyExists => {
-                write!(f, "Transition {:?} is already defined in this State Machine (no duplicates).", "TODO") // todo self.transition)
+                write!(f, "Transition {:?} is already defined in this State Machine (no duplicates).", self.transition)
             }
             TransitionErrorType::NondeterministicTransition => {
-                write!(f, "Two different transitions exist with [input={:?}, event={:?}], leading to non-deterministic state machine", "TODO", "TODO") // todo  self.transition.state_in, self.transition.event)
+                write!(f, "Two different transitions exist with [input={:?}, event={:?}], leading to non-deterministic state machine", self.transition.state_in, self.transition.event)
             }
             TransitionErrorType::CannotApply => {
-                write!(f, "Cannot apply [event={:?}] on [input_state={:?}] (unknown transition)", "TODO", "TODO") // todo  self.transition.event, self.transition.state_in)
+                write!(f, "Cannot apply [event={:?}] on [input_state={:?}] (unknown transition)", self.transition.event, self.transition.state_in)
             }
             TransitionErrorType::NotAllowed => {
-                write!(f, "Cannot apply [transition={:?}], the guard function does not allow it", "TODO") // todo  self.transition)
+                write!(f, "Cannot apply [transition={:?}], the guard function does not allow it", self.transition)
             }
             //_ => write!(f, "Generic TransitionError with {:?}", self.transition)
         }

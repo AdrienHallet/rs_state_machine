@@ -1,13 +1,14 @@
 use crate::core::transition::Transition;
 use crate::core::transitionable::Transitionable;
 use crate::core::errors::*;
+use std::fmt::Debug;
 
 /// Defines the Machine.
 #[derive(Debug, Default)]
 pub struct Machine<S, E> 
 where 
-    S: PartialEq + Clone,
-    E: PartialEq + Clone,
+    S: PartialEq + Clone + Debug, // Type of the State(s)
+    E: PartialEq + Clone + Debug, // Type of the Event(s)
 {
     /// The transitions of the machine.
     pub transitions: Vec<Transition<S, E>>,
@@ -15,8 +16,8 @@ where
 
 impl<S, E> Machine<S, E> 
 where 
-    S: PartialEq + Clone,
-    E: PartialEq + Clone,
+    S: PartialEq + Clone + Copy + Debug,
+    E: PartialEq + Clone + Copy + Debug,
 {
 
     /// Creates an empty machine.
@@ -35,9 +36,9 @@ where
     /// * has the same input and event as another, preventing to decide which output is selected
     pub fn add_transition(&mut self, transition: Transition<S, E>) {
         if self.transitions.contains(&transition) {
-            panic!("Transition already exists") // todo: TransitionError::new(TransitionErrorType::AlreadyExists, transition))
+            panic!("{}", TransitionError::already_exists(transition.state_in, transition.event, transition.state_out))
         } else if self.transitions.iter().any(|trans| trans.partial_compare(Some(&transition.state_in), Some(&transition.event), None)) {
-            panic!("Non-deterministic transition") // todo TransitionError::new(TransitionErrorType::NondeterministicTransition, transition))
+            panic!("{}", TransitionError::nondeterministic(transition.state_in, transition.event, transition.state_out))
         } else {
             self.transitions.push(transition);
         }
@@ -50,18 +51,18 @@ where
     /// 
     /// Errors if `event` cannot be aplied on `input_state` (no matching transition).
     /// 
-    pub fn get_output(&self, input_state: &S, event: &E) -> Result<&S, &str> {
+    pub fn get_output(&self, input_state: &S, event: &E) -> Result<&S, TransitionError<S, E>> {
         for transition in &self.transitions {
             if transition.state_in == *input_state && transition.event == *event {
                 if transition.is_allowed() {
                     return Ok(&transition.state_out);
                 } else {
-                    return Err("Transition not allowed") // Todo better error description
+                    return Err(TransitionError::not_allowed(transition.state_in, transition.event, transition.state_out))
                 }
                 
             }
         }
-        Err("Cannot apply") // todo better error description
+        Err(TransitionError::cannot_apply(*input_state, *event))
     }
 
     /// Returns the [String] `output_state` for the given:
@@ -73,11 +74,11 @@ where
     /// # Errors
     /// 
     /// Errors if `event` cannot be applied on the current state of `object`
-    pub fn apply(&self, object: &mut impl Transitionable<S>, event: E) -> Result<&S, &str> {
+    pub fn apply(&self, object: &mut impl Transitionable<S>, event: E) -> Result<&S, TransitionError<S, E>> {
         let output = self.get_output(&object.get_state(), &event);
         match output {
             Ok(state) => {
-                object.set_state(state.clone());
+                object.set_state(*state);
                 Ok(state)
             },
             Err(error) => Err(error),
