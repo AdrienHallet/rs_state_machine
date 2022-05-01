@@ -6,8 +6,8 @@ use super::transition::Transition;
 #[derive(Debug)]
 pub struct TransitionError<S, E> 
 where
-    S: PartialEq,
-    E: PartialEq,
+    S: Eq,
+    E: Eq,
 {
     /// The type of the error.
     error_type: TransitionErrorType,
@@ -37,8 +37,8 @@ pub enum TransitionErrorType {
 
 impl<S, E> TransitionError<S, E>
 where
-    S: PartialEq + Copy,
-    E: PartialEq + Copy,
+    S: Eq + Copy,
+    E: Eq + Copy,
 {
     /// Creates a new [`TransitionError`] of type [`TransitionErrorType::AlreadyExists`] from the given:  
     /// * `input` - the input state of the duplicated transition
@@ -87,8 +87,8 @@ where
 
 impl<S, E> fmt::Display for TransitionError<S, E>
 where
-    S: PartialEq + Debug,
-    E: PartialEq + Debug,
+    S: Eq + Debug,
+    E: Eq + Debug,
 {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.error_type {

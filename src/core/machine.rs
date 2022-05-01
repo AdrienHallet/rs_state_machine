@@ -7,8 +7,8 @@ use std::fmt::Debug;
 #[derive(Debug, Default)]
 pub struct Machine<S, E> 
 where 
-    S: PartialEq + Clone + Debug, // Type of the State(s)
-    E: PartialEq + Clone + Debug, // Type of the Event(s)
+    S: Eq + Clone + Debug, // Type of the State(s)
+    E: Eq + Clone + Debug, // Type of the Event(s)
 {
     /// The transitions of the machine.
     pub transitions: Vec<Transition<S, E>>,
@@ -16,8 +16,8 @@ where
 
 impl<S, E> Machine<S, E> 
 where 
-    S: PartialEq + Clone + Copy + Debug,
-    E: PartialEq + Clone + Copy + Debug,
+    S: Eq + Clone + Copy + Debug,
+    E: Eq + Clone + Copy + Debug,
 {
 
     /// Creates an empty machine.
