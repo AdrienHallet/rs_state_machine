@@ -50,7 +50,6 @@ where
     /// # Errors
     /// 
     /// Errors if `event` cannot be aplied on `input_state` (no matching transition).
-    /// 
     pub fn get_output(&self, input_state: &S, event: &E) -> Result<&S, TransitionError<S, E>> {
         for transition in &self.transitions {
             if transition.state_in == *input_state && transition.event == *event {
