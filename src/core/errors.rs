@@ -1,13 +1,18 @@
-use core::fmt;
+use std::fmt;
+use std::fmt::Debug;
 use super::transition::Transition;
 
 /// Represents an error with a Transition.
 #[derive(Debug)]
-pub struct TransitionError {
+pub struct TransitionError<S, E> 
+where
+    S: Eq,
+    E: Eq,
+{
     /// The type of the error.
     error_type: TransitionErrorType,
     /// The transition that caused the error.
-    pub transition: Transition,
+    pub transition: Transition<S, E>,
 }
 
 /// Classifies the types of [TransitionError]s that can happen in a [Machine](super::machine::Machine).
@@ -30,31 +35,61 @@ pub enum TransitionErrorType {
     NotAllowed,
 }
 
-impl TransitionError {
-    
-    /// Creates a new [`TransitionError`] from the given:  
-    /// * `error_type` - type of the error  
-    /// * `transition` - the transition from which the error originates
-    pub fn new(error_type: TransitionErrorType, transition: Transition) -> TransitionError {
+impl<S, E> TransitionError<S, E>
+where
+    S: Eq + Copy,
+    E: Eq + Copy,
+{
+    /// Creates a new [`TransitionError`] of type [`TransitionErrorType::AlreadyExists`] from the given:  
+    /// * `input` - the input state of the duplicated transition
+    /// * `event` - the event of the duplicated transition
+    /// * `output` - the output state of the duplicated transition
+    pub fn already_exists(input: S, event: E, output: S) -> TransitionError<S, E> {
         Self {
-            error_type,
-            transition,
+            error_type: TransitionErrorType::AlreadyExists,
+            transition: Transition::new(input, event, output),
+        }
+    }
+
+    /// Creates a new [`TransitionError`] of type [`TransitionErrorType::NondeterministicTransition`] from the given:  
+    /// * `input` - the input state of the nondeterministic transition
+    /// * `event` - the event of the nondeterministic transition
+    /// * `output` - the output state of the nondeterministic transition
+    pub fn nondeterministic(input: S, event: E, output: S) -> TransitionError<S, E> {
+        Self {
+            error_type: TransitionErrorType::NondeterministicTransition,
+            transition: Transition::new(input, event, output),
         }
     }
 
     /// Creates a new [`TransitionError`] of type [`TransitionErrorType::CannotApply`] from the given:
     /// * `input` - input state of the error'd transaction
     /// * `event` - event of the error'd transaction
-    pub fn cannot_apply(input: String, event: String) -> TransitionError {
+    pub fn cannot_apply(input: S, event: E) -> TransitionError<S, E> {
         Self {
             error_type: TransitionErrorType::CannotApply,
-            transition: Transition::new(input, event, "".to_string()),
+            transition: Transition::new(input, event, input), // todo should not re-use input
+        }
+    }
+
+    /// Creates a new [`TransitionError`] of type [`TransitionErrorType::NotAllowed`] from the given:  
+    /// * `input` - the input state of the not allowed transition
+    /// * `event` - the event of the not allowed transition
+    /// * `output` - the output state of the not allowed transition
+    pub fn not_allowed(input: S, event: E, output: S) -> TransitionError<S, E> {
+        Self {
+            error_type: TransitionErrorType::NotAllowed,
+            transition: Transition::new(input, event, output),
         }
     }
 
 }
 
-impl fmt::Display for TransitionError {
+impl<S, E> fmt::Display for TransitionError<S, E>
+where
+    S: Eq + Debug,
+    E: Eq + Debug,
+{
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.error_type {
             TransitionErrorType::AlreadyExists => {
